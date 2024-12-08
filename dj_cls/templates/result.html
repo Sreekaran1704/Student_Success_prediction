@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Checker</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Siren effect for Dropped */
+        @keyframes siren {
+            0% { background-color: red; }
+            50% { background-color: white; }
+            100% { background-color: red; }
+        }
+        .siren-effect {
+            animation: siren 1s infinite;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow p-4" style="width: 20rem;">
+        <div class="card-body text-center">
+            <h5 class="card-title mb-3">Student Status Checker</h5>
+            <div id="status" class="alert alert-secondary" role="alert">
+                Loading...
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <script>
+
+        let ans = {{ans}}; 
+
+
+        if (Array.isArray(ans) && ans.length > 0) {
+            ans = ans[0];
+        }
+
+
+        let statusElement = document.getElementById("status");
+        let status;
+        if (ans === 0) {
+            status = "Dropped";
+            statusElement.className = "alert alert-danger siren-effect";
+        } else if (ans === 1) {
+            status = "Enrolled";
+            statusElement.className = "alert alert-success";
+        } else if (ans === 2) {
+            status = "Graduate";
+            statusElement.className = "alert alert-primary";
+
+
+            const confettiDuration = 3000;
+            const end = Date.now() + confettiDuration;
+
+
+            const confettiInterval = setInterval(() => {
+                if (Date.now() >= end) {
+                    clearInterval(confettiInterval);
+                } else {
+                    confetti({
+                        particleCount: 100,
+                        startVelocity: 30,
+                        spread: 360,
+                        origin: { x: Math.random(), y: Math.random() - 0.2 }
+                    });
+                }
+            }, 250);
+        } else {
+            status = "Unknown Status";
+            statusElement.className = "alert alert-warning";
+        }
+
+
+        statusElement.innerText = status;
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
